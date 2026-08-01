@@ -1,0 +1,6 @@
+@DevHabits.api_HostAddress = http://localhost:2300
+
+GET {{DevHabits.api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

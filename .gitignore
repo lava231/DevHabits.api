@@ -1,0 +1,87 @@
+## Visual Studio
+.vscode/
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Build results
+/bin/
+/obj/
+**/bin/
+**/obj/
+
+## Rider
+.idea/
+
+## ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+## Visual Studio cache/options
+*.VC.db
+*.VC.opendb
+
+## Build artifacts
+*.dll
+*.exe
+*.pdb
+*.app
+*.msi
+*.nupkg
+
+## NuGet
+*.nupkg
+# The packages folder can be ignored because of Package Restore
+**/packages/*
+# except build/, which is used as an MSBuild target.
+!**/packages/build/
+# Uncomment if necessary however generally it will be regenerated when needed
+#!**/packages/repositories.config
+
+## OS generated files
+Thumbs.db
+.DS_Store
+
+## User-specific files
+*.rsuser
+*.suo
+*.user
+*.userprefs
+
+## ASP.NET temporary files
+*.aspnet_client/
+
+## EF Core model snapshot
+*.Snapshot
+
+## Logs
+*.log
+
+## dotnet tools
+/.dotnet/tools/
+
+## Azure Functions
+local.settings.json
+
+## EF Migrations
+**/Migrations/*.Designer.cs
+**/Migrations/*.resx
+
+## JetBrains Rider
+.idea/
+
+## Local Secrets
+.env
+.env.*
+appsettings.Development.json
+
+## Coverage
+.coverage
+.coveragexml
+coverage.opencover.xml
+
+## Misc
+project.lock.json
+project.fragment.lock.json
+artifacts/
