@@ -1,27 +1,154 @@
-# DevHabits.api
+# DevHabits API
 
-Short description: API project for DevHabits (ASP.NET Core, .NET 10).
+A RESTful Web API for managing personal habits, tracking progress, and helping users build consistent routines.
 
-Quick start
-1. Open the solution in Visual Studio: DevHabits.api.slnx
-2. Build and run from Visual Studio or via CLI: dotnet build && dotnet run --project ./src/YourProject
+## Features
 
-Create a GitHub repo and push (recommended: GitHub CLI)
-1. Install and authenticate gh: gh auth login
-2. From the repo root (PowerShell):
-   cd "D:\Practice Projects\DevHabit\DevHabits.api\"
-   gh repo create DevHabits.api --public --source=. --remote=origin --push
+* User authentication with JWT
+* Habit management (Create, Read, Update, Delete)
+* Progress tracking
+* Pagination, filtering, and searching
+* Input validation
+* Global exception handling
+* Structured logging
+* OpenAPI documentation with Scalar
+* Clean Architecture principles
+* Entity Framework Core with SQL Server
 
-Fallback using git + GitHub web:
-1. Create an empty repository on github.com named DevHabits.api (no README)
-2. Then run:
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin https://github.com/<USERNAME>/DevHabits.api.git
-   git push -u origin main
+## Technologies
 
-Notes
-- For private repos, use --private with gh or set repo visibility on GitHub.
-- Use a Personal Access Token (repo scope) for HTTPS authentication if needed.
+* ASP.NET Core (.NET 10)
+* C#
+* Entity Framework Core
+* SQL Server
+* JWT Authentication
+* Scalar API Reference
+* AutoMapper
+* Docker & Docker Compose
+* Serilog
+* xUnit (planned)
+
+## Project Structure
+
+```text
+DevHabits.Api
+├── Controllers
+├── Services
+├── Repositories
+├── Models
+├── DTOs
+├── Data
+├── Middleware
+├── Mappings
+├── Validators
+└── Program.cs
+```
+
+## Getting Started
+
+### Prerequisites
+
+* .NET 10 SDK
+* SQL Server
+* Docker Desktop (optional)
+* Visual Studio 2022 or Visual Studio Code
+
+### Clone the repository
+
+```bash
+git clone https://github.com/<your-username>/DevHabits.api.git
+cd DevHabits.api
+```
+
+### Configure the database
+
+Update the connection string in:
+
+```text
+appsettings.Development.json
+```
+
+### Apply database migrations
+
+```bash
+dotnet ef database update
+```
+
+### Run the application
+
+```bash
+dotnet run
+```
+
+## API Documentation
+
+After starting the application, open:
+
+```text
+https://localhost:2301/scalar
+```
+
+The OpenAPI document is available at:
+
+```text
+https://localhost:2301/openapi/v1.json
+```
+
+> Replace the port if your project uses a different one.
+
+## Authentication
+
+This API uses **JWT Bearer Authentication**.
+
+To access protected endpoints:
+
+1. Register or log in.
+2. Copy the generated JWT.
+3. Click **Authorize** in Scalar.
+4. Enter:
+
+```text
+Bearer <your_token>
+```
+
+## Development Workflow
+
+```bash
+git pull
+git checkout -b feature/your-feature
+```
+
+After making changes:
+
+```bash
+git add .
+git commit -m "Describe your changes"
+git push
+```
+
+## Roadmap
+
+* [ ] User registration
+* [ ] User login
+* [ ] JWT authentication
+* [ ] Habit CRUD
+* [ ] Categories
+* [ ] Progress tracking
+* [ ] Pagination
+* [ ] Filtering
+* [ ] Validation
+* [ ] Logging
+* [ ] Docker support
+* [ ] Unit tests
+* [ ] Integration tests
+* [ ] CI/CD pipeline
+
+## License
+
+This project is intended for learning and portfolio purposes.
+
+## Author
+
+**lava231**
+
+Backend Developer focused on ASP.NET Core, REST APIs, Entity Framework Core, and Clean Architecture.
