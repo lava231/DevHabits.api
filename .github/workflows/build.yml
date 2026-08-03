@@ -1,0 +1,40 @@
+name: Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+env:
+  # Project targets .NET 10, use the matching major version for the runner
+  DOTNET_VERSION: "10.x"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        # set working-directory to the project folder that contains the csproj
+        working-directory: DevHabits.api
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore
+        run: dotnet restore ./DevHabits.api.csproj
+
+      - name: Build
+        run: dotnet build ./DevHabits.api.csproj --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test ./DevHabits.api.csproj --configuration Release --no-restore --no-build
+
+      - name: Publish
+        run: dotnet publish ./DevHabits.api.csproj --configuration Release --no-restore --no-build
