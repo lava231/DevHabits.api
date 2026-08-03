@@ -87,4 +87,7 @@ project.fragment.lock.json
 artifacts/
 
 .containers
+containers/
 
+# Docker SQL Server data
+containers/sqlserver_data/

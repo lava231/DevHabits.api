@@ -1,6 +1,7 @@
 services:
   devhabits.api:
     image: ${DOCKER_REGISTRY-}devhabitsapi
+    container_name: devhabit-api
     build:
       context: .
       dockerfile: DevHabits.api/Dockerfile
@@ -8,30 +9,40 @@ services:
       - "2300:8080"
       - "2301:8081"
     environment:
-      # OTEL_EXPORTER_OTLP_ENDPOINT: "http://devhabit.seq:5341/ingest/otlp"
-      # OTEL_EXPORTER_OTLP_PROTOCOL: "http/protobuf"
-    # depends_on:
-    #   - devhabit.seq
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://devhabit.aspire-dashboard:18889"
       OTEL_EXPORTER_OTLP_PROTOCOL: "grpc"
 
-  devhabit.seq:
-    image: datalust/seq:2024.3
+      ConnectionStrings__Database: >
+        Server=devhabit.sqlserver,1433;
+        Database=DevHabits;
+        User Id=sa;
+        Password=DevHabit@12345;
+        TrustServerCertificate=True;
+
+    depends_on:
+      - devhabit.sqlserver
+      - devhabit.aspire-dashboard
+
+  devhabit.sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-CU18-ubuntu-22.04
+    container_name: devhabit-sqlserver
     environment:
       ACCEPT_EULA: "Y"
-      SEQ_FIRSTRUN_NOAUTHENTICATION: "true"
+      MSSQL_SA_PASSWORD: "DevHabit@12345"
+      MSSQL_PID: "Developer"
     volumes:
-      - seq_storage:/data
+      - devhabit_sqlserver_data:/var/opt/mssql
     ports:
-      - "8080:80"
-      - "5341:5341"
- 
+      - "1433:1433"
+    restart: unless-stopped
+
   devhabit.aspire-dashboard:
     image: mcr.microsoft.com/dotnet/aspire-dashboard:9.0
+    container_name: devhabit-aspire-dashboard
     environment:
-      DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS: true
+      DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS: "true"
     ports:
       - "18888:18888"
 
 volumes:
-  seq_storage:
+  devhabit_sqlserver_data:

@@ -16,16 +16,11 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerDatabase"),
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Database"),
         sqlServerOptions => sqlServerOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Application));
     options.UseSnakeCaseNamingConvention();
 });
 
-// NOTE: Logging is registered via .WithLogging(...) below (not builder.Logging.AddOpenTelemetry),
-// so that the single UseOtlpExporter() call handles export for tracing, metrics, AND logging.
-// Mixing signal-specific AddOtlpExporter/builder.Logging.AddOpenTelemetry with the cross-cutting
-// UseOtlpExporter() throws: "Signal-specific AddOtlpExporter methods and the cross-cutting
-// UseOtlpExporter method being invoked on the same IServiceCollection is not supported."
 builder.Services.AddOpenTelemetry()
     .ConfigureResource(resource => resource.AddService(builder.Environment.ApplicationName))
     .WithTracing(tracing => tracing
@@ -55,9 +50,9 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
-//app.UseAuthorization();
+app.UseAuthorization();
 
 app.MapControllers();
 
