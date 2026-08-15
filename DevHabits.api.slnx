@@ -7,7 +7,4 @@
   <Folder Name="/src/">
     <Project Path="DevHabits.api/DevHabits.api.csproj" />
   </Folder>
-  <Project Path="docker-compose.dcproj">
-    <Build />
-  </Project>
 </Solution>

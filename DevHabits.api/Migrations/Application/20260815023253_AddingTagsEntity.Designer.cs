@@ -4,6 +4,7 @@ using DevHabits.api.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DevHabits.api.Migrations.Application
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260815023253_AddingTagsEntity")]
+    partial class AddingTagsEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,78 +219,6 @@ namespace DevHabits.api.Migrations.Application
                         .HasDatabaseName("ix_tags_name");
 
                     b.ToTable("tags", "dev_habits");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "tag-001",
-                            CreatedAtUtc = new DateTime(2026, 8, 15, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Habits related to health and overall wellness",
-                            Name = "Health"
-                        },
-                        new
-                        {
-                            Id = "tag-002",
-                            CreatedAtUtc = new DateTime(2026, 8, 15, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Habits related to exercise and physical activity",
-                            Name = "Fitness"
-                        },
-                        new
-                        {
-                            Id = "tag-003",
-                            CreatedAtUtc = new DateTime(2026, 8, 15, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Habits related to studying and acquiring knowledge",
-                            Name = "Learning"
-                        },
-                        new
-                        {
-                            Id = "tag-004",
-                            CreatedAtUtc = new DateTime(2026, 8, 15, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Habits related to productivity and efficiency",
-                            Name = "Productivity"
-                        },
-                        new
-                        {
-                            Id = "tag-005",
-                            CreatedAtUtc = new DateTime(2026, 8, 15, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Habits related to mindfulness and mental well-being",
-                            Name = "Mindfulness"
-                        },
-                        new
-                        {
-                            Id = "tag-006",
-                            CreatedAtUtc = new DateTime(2026, 8, 15, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Habits related to food and healthy eating",
-                            Name = "Nutrition"
-                        },
-                        new
-                        {
-                            Id = "tag-007",
-                            CreatedAtUtc = new DateTime(2026, 8, 15, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Habits related to programming and software development",
-                            Name = "Coding"
-                        },
-                        new
-                        {
-                            Id = "tag-008",
-                            CreatedAtUtc = new DateTime(2026, 8, 15, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Habits related to personal growth and development",
-                            Name = "Personal"
-                        },
-                        new
-                        {
-                            Id = "tag-009",
-                            CreatedAtUtc = new DateTime(2026, 8, 15, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Habits related to family, friends, and relationships",
-                            Name = "Social"
-                        },
-                        new
-                        {
-                            Id = "tag-010",
-                            CreatedAtUtc = new DateTime(2026, 8, 15, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Habits related to money and financial management",
-                            Name = "Finance"
-                        });
                 });
 
             modelBuilder.Entity("DevHabits.api.Entities.Habit", b =>

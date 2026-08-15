@@ -3,9 +3,9 @@
     "Docker Compose": {
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
-      "composeLaunchAction": "LaunchBrowser",
+      //"composeLaunchAction": "LaunchBrowser",
       "composeLaunchServiceName": "devhabits.api",
-      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/scalar",
+      //"composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/scalar",
       "serviceActions": {
         "devhabits.api": "StartDebugging",
         "devhabit.seq": "StartWithoutDebugging"

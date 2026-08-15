@@ -1,5 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using Ical.Net;
+﻿using DevHabits.api.DTOs.Habits;
 
 namespace DevHabits.api.Entities;
 
@@ -11,14 +10,13 @@ public sealed class Habit
     public HabitType Type { get; set; }
     public Frequency Frequency { get; set; }
     public Target Target { get; set; }
-    public HabitStauts Status { get; set; }
+    public HabitStatus Status { get; set; }
     public bool IsArchived { get; set; }
     public DateOnly? EndDate { get; set; }
     public Milestone? Milestone { get; set; }
     public DateTime CreatedAtUtc { get; set; }
     public DateTime? UpdatedAtUtc { get; set; }
     public DateTime? LastCompletedAtUtc { get; set; }
-
 }
 
 public sealed class Milestone
@@ -46,9 +44,17 @@ public enum HabitType
     Measurable = 2,
 }
 
-public enum HabitStauts
+public enum HabitStatus
 {
     None = 0,
     Ongoing = 1,
     Completed = 2,
+}
+
+public enum FrequencyType
+{
+    None = 0,
+    Daily = 1,
+    Weekly = 2,
+    Monthly = 3
 }
