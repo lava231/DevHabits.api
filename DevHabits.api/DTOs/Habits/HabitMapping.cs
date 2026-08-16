@@ -17,7 +17,7 @@ internal static class HabitMapping
             Frequency = new FrequencyDto
             {
                 Type = habit.Frequency.Type,
-                TimePerPeriod = habit.Frequency.TimePerPeriod
+                TimesPerPeriod = habit.Frequency.TimePerPeriod
             },
             Target = new TargetDto
             {
@@ -50,7 +50,7 @@ internal static class HabitMapping
             Frequency = new Frequency
             {
                 Type = createHabitDto.Frequency.Type,
-                TimePerPeriod = createHabitDto.Frequency.TimePerPeriod
+                TimePerPeriod = createHabitDto.Frequency.TimesPerPeriod
             },
             Target = new Target
             {
@@ -79,7 +79,7 @@ internal static class HabitMapping
         habit.Frequency = new Frequency
         {
             Type = dto.Frequency.Type,
-            TimePerPeriod = dto.Frequency.TimePerPeriod
+            TimePerPeriod = dto.Frequency.TimesPerPeriod
         };
 
         habit.Target = new Target

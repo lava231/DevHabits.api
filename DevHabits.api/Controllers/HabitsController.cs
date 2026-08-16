@@ -3,9 +3,11 @@ using Azure;
 using DevHabits.api.Database;
 using DevHabits.api.DTOs.Habits;
 using DevHabits.api.Entities;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace DevHabits.api.Controllers;
@@ -27,11 +29,11 @@ public class HabitsController(ApplicationDbContext dbContext) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<HabitDto>> GetHabitById(string id)
+    public async Task<ActionResult<HabitWithTagsDto>> GetHabitById(string id)
     {
-        var habit = await dbContext.Habits
+        HabitWithTagsDto? habit = await dbContext.Habits
             .Where(h => h.Id == id)
-            .Select(HabitQueries.HabitToDto())
+            .Select(HabitQueries.HabitToWithTagsDto())
             .FirstOrDefaultAsync();
 
         if (habit == null)
@@ -43,8 +45,19 @@ public class HabitsController(ApplicationDbContext dbContext) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<HabitDto>> CreateHabit(CreateHabitDto createHabitDto)
+    public async Task<ActionResult<HabitDto>> CreateHabit(CreateHabitDto createHabitDto, 
+        IValidator<CreateHabitDto> validator)
     {
+        FluentValidation.Results.ValidationResult validationResult = await validator.ValidateAsync(createHabitDto);
+        if (!validationResult.IsValid)
+        {
+            ProblemDetails problem = ProblemDetailsFactory.CreateProblemDetails(HttpContext,
+                StatusCodes.Status400BadRequest);
+            problem.Extensions.Add("errors", validationResult.ToDictionary());
+
+            return BadRequest(problem);
+        }
+
         Habit habit = createHabitDto.ToEntity();
 
         dbContext.Habits.Add(habit);

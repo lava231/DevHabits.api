@@ -1,4 +1,5 @@
-﻿using DevHabits.api.DTOs.Habits;
+﻿using System.Reflection.Metadata.Ecma335;
+using DevHabits.api.DTOs.Habits;
 
 namespace DevHabits.api.Entities;
 
@@ -17,6 +18,9 @@ public sealed class Habit
     public DateTime CreatedAtUtc { get; set; }
     public DateTime? UpdatedAtUtc { get; set; }
     public DateTime? LastCompletedAtUtc { get; set; }
+
+    public List<Tag> Tags { get; set; }
+    public List<HabitTag> HabitTags { get; set; }
 }
 
 public sealed class Milestone

@@ -7,7 +7,8 @@ public record HabitsCollectionDto
 {
     public required IEnumerable<HabitDto> Items { get; init; }
 }
-public sealed record HabitDto
+
+public record HabitDto
 {
     public required string Id { get; init; }
     public required string Name { get; init; }
@@ -39,5 +40,5 @@ public sealed record TargetDto
 public sealed record FrequencyDto
 {
     public required FrequencyType Type { get; init; }
-    public required int TimePerPeriod { get; init; }
+    public required int TimesPerPeriod { get; init; }
 }
