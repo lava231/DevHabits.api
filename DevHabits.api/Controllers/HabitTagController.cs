@@ -1,6 +1,8 @@
 ﻿using DevHabits.api.Database;
 using DevHabits.api.DTOs.HabitTag;
 using DevHabits.api.Entities;
+using DevHabits.api.Middleware.Exceptions;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,30 +14,24 @@ namespace DevHabits.api.Controllers;
 public class HabitTagController(ApplicationDbContext dbContext) : ControllerBase
 {
     [HttpPut]
-    public async Task<ActionResult> UpsertHabitTags(string habitId, UpsertHabitTagsDto upsertHabitTagsDto)
+    public async Task<ActionResult> UpsertHabitTags(string habitId, UpsertHabitTagsDto upsertHabitTagsDto,
+        [FromServices] IValidator<UpsertHabitTagsDto> validator)
     {
+        await validator.ValidateAndThrowAsync(upsertHabitTagsDto);
+
         Habit? habit = await dbContext.Habits
             .Include(h => h.HabitTags)
             .FirstOrDefaultAsync(h => h.Id == habitId);
 
         if(habit == null)
         {
-            return NotFound();
+            throw new NotFoundException(nameof(Habit), habitId);
         }
-        
+
         var currentTagIds = habit.HabitTags.Select(ht => ht.TagId).ToHashSet();
         if (currentTagIds.SetEquals(upsertHabitTagsDto.TagIds))
         {
             return NoContent();
-        }
-
-        List<string> existingTagIds = await dbContext.Tags
-            .Where(t => upsertHabitTagsDto.TagIds.Contains(t.Id))
-            .Select(t => t.Id)
-            .ToListAsync();
-        if (existingTagIds.Count != upsertHabitTagsDto.TagIds.Count)
-        {
-            return BadRequest("One or more tag IDs are invalid.");
         }
 
         habit.HabitTags.RemoveAll(ht => !upsertHabitTagsDto.TagIds.Contains(ht.TagId));
@@ -61,7 +57,9 @@ public class HabitTagController(ApplicationDbContext dbContext) : ControllerBase
 
         if (habitTag == null)
         {
-            return NotFound();
+            throw new NotFoundException(
+             nameof(HabitTag),
+             $"{habitId}:{tagId}");
         }
 
         dbContext.HabitTags.Remove(habitTag);

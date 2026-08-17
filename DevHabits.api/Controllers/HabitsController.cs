@@ -3,6 +3,7 @@ using Azure;
 using DevHabits.api.Database;
 using DevHabits.api.DTOs.Habits;
 using DevHabits.api.Entities;
+using DevHabits.api.Middleware.Exceptions;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
@@ -38,7 +39,7 @@ public class HabitsController(ApplicationDbContext dbContext) : ControllerBase
 
         if (habit == null)
         {
-            return NotFound();
+            throw new NotFoundException(nameof(habit), id);
         }
 
         return Ok(habit);
@@ -48,15 +49,7 @@ public class HabitsController(ApplicationDbContext dbContext) : ControllerBase
     public async Task<ActionResult<HabitDto>> CreateHabit(CreateHabitDto createHabitDto, 
         IValidator<CreateHabitDto> validator)
     {
-        FluentValidation.Results.ValidationResult validationResult = await validator.ValidateAsync(createHabitDto);
-        if (!validationResult.IsValid)
-        {
-            ProblemDetails problem = ProblemDetailsFactory.CreateProblemDetails(HttpContext,
-                StatusCodes.Status400BadRequest);
-            problem.Extensions.Add("errors", validationResult.ToDictionary());
-
-            return BadRequest(problem);
-        }
+        await validator.ValidateAndThrowAsync(createHabitDto);
 
         Habit habit = createHabitDto.ToEntity();
 
@@ -69,14 +62,18 @@ public class HabitsController(ApplicationDbContext dbContext) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> UpdateHabit( string id,[FromBody] UpdateHabitDto updateHabitDto)
+    public async Task<ActionResult> UpdateHabit( string id,[FromBody] UpdateHabitDto updateHabitDto,
+        [FromServices] IValidator<UpdateHabitDto> validator)
     {
+        await validator.ValidateAndThrowAsync(updateHabitDto);
+
         var habit = await dbContext.Habits.FirstOrDefaultAsync(h =>  h.Id == id);
 
         if (habit == null)
         {
-            return NotFound();
+            throw new NotFoundException(nameof(Habit), id);
         }
+
 
         habit.UpdateFromDto(updateHabitDto);
         
@@ -86,13 +83,14 @@ public class HabitsController(ApplicationDbContext dbContext) : ControllerBase
     }
 
     [HttpPatch("{id}")]
-    public async Task<ActionResult> PatchHabit(string id, JsonPatchDocument<HabitDto> patchDocument)
+    public async Task<ActionResult> PatchHabit(string id, JsonPatchDocument<HabitDto> patchDocument,
+        [FromServices] IValidator<HabitDto> validator)
     {
         var habit = await dbContext.Habits.FirstOrDefaultAsync(h => h.Id == id);
 
         if (habit == null)
         {
-            return NotFound();
+            throw new NotFoundException(nameof(Habit), id);
         }
 
         HabitDto habitDto = habit.ToDto();
@@ -104,6 +102,8 @@ public class HabitsController(ApplicationDbContext dbContext) : ControllerBase
             return ValidationProblem(ModelState);
         }
 
+        await validator.ValidateAndThrowAsync(habitDto);
+        
         habit.Name = habitDto.Name;
         habit.Description = habitDto.Description;
         habit.UpdatedAtUtc = DateTime.UtcNow;
@@ -121,7 +121,7 @@ public class HabitsController(ApplicationDbContext dbContext) : ControllerBase
 
         if (habit == null)
         {
-            return NotFound(); 
+            throw new NotFoundException(nameof(Habit), id);
         }
 
         dbContext.Habits.Remove(habit);

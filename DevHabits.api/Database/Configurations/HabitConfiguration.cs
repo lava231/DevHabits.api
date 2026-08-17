@@ -10,7 +10,7 @@ public class HabitConfiguration : IEntityTypeConfiguration<Habit>
     {
         builder.HasKey(h => h.Id);
         
-        builder.HasIndex(h => h.Name);
+        builder.HasIndex(h => h.Name).IsUnique();
 
         builder.Property(h => h.Id).HasMaxLength(500);
         builder.Property(h => h.Name).HasMaxLength(100);
